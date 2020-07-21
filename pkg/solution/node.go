@@ -2,7 +2,6 @@ package solution
 
 import (
 	"errors"
-	"math"
 )
 
 var (
@@ -66,12 +65,6 @@ func (n *Node) CreateChild(v int) *Node {
 		Depth:  n.Depth + 1,
 		Status: NEW,
 	})
-	switch isNeg := math.Signbit(float64(v)); isNeg {
-	case true: // Away game
-		n.ChildrenMask.SetAway(v * -1)
-	case false:
-		n.ChildrenMask.SetHome(v)
-	}
 	return n.LastChild()
 }
 

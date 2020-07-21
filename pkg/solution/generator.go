@@ -63,7 +63,7 @@ func (s *Sudoku) nextFree() int {
 	return -1
 }
 
-func (s *Sudoku) fillBoard() {
+func (s *Sudoku) FillBoard() {
 	for i := 0; i < len(s.board); i++ {
 		pos := s.nextFree()
 		for _, num := range s.one_to_n {
@@ -135,7 +135,8 @@ func (s *Sudoku) legalMove(check, pos int) bool {
 	return true
 }
 
-func (s *Sudoku) printNinePretty() {
+func (s *Sudoku) PrintNinePretty() {
+	fmt.Print(strings.Repeat("-", (s.n+4)*2), "\n")
 	for k, v := range s.board {
 		// The beginning of every line
 		if k%s.n == 0 {

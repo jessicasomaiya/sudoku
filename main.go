@@ -1,8 +1,12 @@
 package main
 
+import (
+	"github.com/jessicasomaiya/sudoku/pkg/solution"
+)
+
 func main() {
 	s := solution.InitSudoku(9)
-	s.fillBoard()
+	s.FillBoard()
 
-	s.printNinePretty()
+	s.PrintNinePretty()
 }
