@@ -2,8 +2,10 @@ package solution
 
 import (
 	"fmt"
+	"io"
 	"log"
-	"strings"
+	"math/rand"
+	"os"
 )
 
 func InitSudoku(n int) *Sudoku {
@@ -27,15 +29,35 @@ type Sudoku struct {
 	one_to_n []int
 }
 
+func (s *Sudoku) FillPos(pos, v int) {
+	s.board[pos] = v
+}
+
 func (s *Sudoku) generateSlice(n int) {
 	for i := 1; i <= n; i++ {
 		s.one_to_n = append(s.one_to_n, i)
 	}
 }
 
-func (s *Sudoku) printComplete() {
+func (s *Sudoku) validate() bool {
+	var total int
+	for j := 0; j < s.n; j++ {
+		start := j * s.n
+		for i := start; i < start+s.n; i++ {
+			total += s.board[i]
+		}
+		if total == 45 {
+			return true
+		}
+	}
+	return false
+}
+
+func (s *Sudoku) printComplete(b io.Writer) {
 	if s.nextFree() == -1 {
-		s.printBoard()
+
+		fmt.Println("Full board!")
+		s.PrintNinePretty(b)
 	}
 }
 
@@ -63,23 +85,37 @@ func (s *Sudoku) nextFree() int {
 	return -1
 }
 
-func (s *Sudoku) FillBoard() {
-	for i := 0; i < len(s.board); i++ {
-		pos := s.nextFree()
-		for _, num := range s.one_to_n {
-			if s.legalMove(num, pos) {
-				s.board[pos] = num
-			}
-			continue
+// func (s *Sudoku) FillBoard() {
+// 	for i := 0; i < len(s.board); i++ {
+// 		pos := s.nextFree()
+// 		// for _, num := range s.one_to_n {
+// 		// 	if s.legalMove(num, pos) {
+// 		// 		s.board[pos] = num
+// 		// 	}
+// 		// 	continue
+// 		// }
+// 		for i := 0; i < s.n; i++ {
+// 			num := rand.Intn(s.n)
+// 			if s.isLegal(num+1, pos) {
+// 				s.board[pos] = num + 1
+// 				continue
+// 			}
+// 		}
+// 	}
+// }
+
+// Returns random legal move
+func (s *Sudoku) LegalMove(pos int) int {
+	var legal []int
+	for _, v := range s.one_to_n {
+		if s.isLegal(v, pos) {
+			legal = append(legal, v)
 		}
-		// for i := 0; i < s.n; i++ {
-		// 	num := rand.Intn(s.n)
-		// 	if s.legalMove(num+1, pos) {
-		// 		s.board[pos] = num + 1
-		// 		continue
-		// 	}
-		// }
 	}
+	if legal == nil {
+		return -1
+	}
+	return legal[rand.Intn(len(legal))]
 }
 
 func (s *Sudoku) posBoard() {
@@ -114,12 +150,12 @@ func (s *Sudoku) findSquarePos(pos int) []int {
 			return square
 		}
 	}
-	log.Fatal("no square found")
+	log.Fatal("no square found at pos", pos)
 	return nil
 }
 
 // TODO: generateLookup()
-func (s *Sudoku) legalMove(check, pos int) bool {
+func (s *Sudoku) isLegal(check, pos int) bool {
 	s.setRow(pos)
 	s.setColumn(pos)
 	s.setSquare(pos)
@@ -135,30 +171,100 @@ func (s *Sudoku) legalMove(check, pos int) bool {
 	return true
 }
 
-func (s *Sudoku) PrintNinePretty() {
-	fmt.Print(strings.Repeat("-", (s.n+4)*2), "\n")
+func (s *Sudoku) clearBoard() {
+	for k, _ := range s.board {
+		s.board[k] = 0
+	}
+}
+
+func (s *Sudoku) FillWholeBoard(loops int, b *os.File) {
+	for i := 0; i <= loops; i++ {
+		// if i%50 == 0 {
+		// 	fmt.Fprintf(b, "Board at %d loops \n", i)
+		// 	s.PrintNinePretty(b)
+		// 	fmt.Fprintln(b)
+		// }
+		pos := s.nextFree()
+		if pos == -1 && s.validate() {
+			fmt.Fprintf(b, "\nComplete Sudoku Board at loop %d \n", i)
+			s.PrintNinePretty(b)
+			s.clearBoard()
+			continue
+		}
+		value := s.LegalMove(pos)
+		if value == -1 {
+			// fmt.Fprintf(b, "no legal moves in pos %d \n", pos)
+			// No legal move so move back in the tree
+			// nextFree will be one before current one
+			s.FillPos(pos-1, 0)
+			s.FillPos(pos-2, 0)
+			s.FillPos(pos-3, 0)
+			s.FillPos(pos-4, 0)
+			s.FillPos(pos-5, 0)
+			s.FillPos(pos-6, 0)
+			s.FillPos(pos-7, 0)
+			s.FillPos(pos-8, 0)
+
+			continue
+		}
+		s.FillPos(pos, value)
+	}
+	fmt.Fprintf(b, "\nFinished all loops = %d \n", loops)
+	s.PrintNinePretty(b)
+}
+
+func (s *Sudoku) PrintNinePretty(b io.Writer) {
+	fmt.Fprintf(b, "-------------------------\n")
 	for k, v := range s.board {
 		// The beginning of every line
 		if k%s.n == 0 {
-			fmt.Printf("| %d ", v)
+			fmt.Fprintf(b, "| %d ", v)
 			continue
 		}
 		// Every third pos
 		if (k+1)%(s.n/3) == 0 && (k+1)%s.n != 0 && (k+1)%(s.n*3) != 0 {
-			fmt.Printf("%d | ", v)
+			fmt.Fprintf(b, "%d | ", v)
 			continue
 		}
 		// At the end of every line
 		if (k+1)%s.n == 0 && (k+1)%(s.n*3) != 0 {
-			fmt.Printf("%d | \n", v)
+			fmt.Fprintf(b, "%d | \n", v)
 			continue
 		}
 		// Break line
 		if (k+1)%(s.n*3) == 0 {
-			fmt.Printf("%d | \n", v)
-			fmt.Print(strings.Repeat("-", (s.n+4)*2), "\n")
+			fmt.Fprintf(b, "%d | \n", v)
+			fmt.Fprintf(b, "-------------------------\n")
 			continue
 		}
-		fmt.Printf("%d ", v)
+		fmt.Fprintf(b, "%d ", v)
 	}
 }
+
+// func (s *Sudoku) PrintNinePretty(b io.Writer) {
+// 	fmt.Print(strings.Repeat("-", ((s.n+4)*2)), "\n")
+// 	for k, v := range s.board {
+// 		// The beginning of every line
+// 		if k%s.n == 0 {
+// 			fmt.Printf("| %d ", v)
+// 			continue
+// 		}
+// 		// Every third pos
+// 		if (k+1)%(s.n/3) == 0 && (k+1)%s.n != 0 && (k+1)%(s.n*3) != 0 {
+// 			fmt.Printf("%d | ", v)
+// 			continue
+// 		}
+// 		// At the end of every line
+// 		if (k+1)%s.n == 0 && (k+1)%(s.n*3) != 0 {
+// 			fmt.Printf("%d | \n", v)
+// 			continue
+// 		}
+// 		// Break line
+// 		if (k+1)%(s.n*3) == 0 {
+// 			fmt.Printf("%d | \n", v)
+// 			fmt.Print(strings.Repeat("-", (s.n+4)*2), "\n")
+// 			continue
+// 		}
+// 		fmt.Printf("%d ", v)
+// 	}
+// }

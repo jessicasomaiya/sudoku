@@ -1,9 +1,26 @@
 # Sudoku Generator
 
-Generate full sudoku grid
+Generate full sudoku grid from scratch using golang. 
+#
+## Run 
 
+To run the code from the sudoku directory, run the following command:
+```
+go run cmd/makeboard/main.go
+```
+#
 
+## Parameters
+Parameters can be changed in main.go: 
+```
+	LOOPS := 5000
+	SIZE := 9
+```
+
+ Currently best results come from 9x9 sudoku grid (size = 9)
+#
 ## Complete Grid
+Complete grid can be found in the sudoku directory under 'boards'
 ```
 Complete Sudoku Board at loop X
 -------------------------

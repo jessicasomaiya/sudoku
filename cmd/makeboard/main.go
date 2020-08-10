@@ -8,16 +8,18 @@ import (
 )
 
 func main() {
+	LOOPS := 5000
+	SIZE := 9
+	s := solution.InitSudoku(SIZE)
+
 	b, err := os.Create("boards")
 	if err != nil {
 		log.Fatal("output cannot be created")
 	}
-	s := solution.InitSudoku(9)
-
 	// root := solution.CreateRoot(2)
 	// mcts := solution.NewMCTS(root)
 	// mcts.Gamble(1000)
-	s.FillWholeBoard(5000, b)
+	s.FillWholeBoard(LOOPS, b)
 
 	// s.PrintNinePretty(b)
 }
