@@ -16,27 +16,19 @@ func InitSudoku(n int) *Sudoku {
 		column: make([]int, n),
 		square: make([]int, n),
 	}
-	s.generateSlice(n)
 	return s
 }
 
 type Sudoku struct {
-	n        int
-	board    []int
-	row      []int
-	column   []int
-	square   []int
-	one_to_n []int
+	n      int
+	board  []int
+	row    []int
+	column []int
+	square []int
 }
 
 func (s *Sudoku) FillPos(pos, v int) {
 	s.board[pos] = v
-}
-
-func (s *Sudoku) generateSlice(n int) {
-	for i := 1; i <= n; i++ {
-		s.one_to_n = append(s.one_to_n, i)
-	}
 }
 
 func (s *Sudoku) validate() bool {
@@ -88,7 +80,7 @@ func (s *Sudoku) nextFree() int {
 // func (s *Sudoku) FillBoard() {
 // 	for i := 0; i < len(s.board); i++ {
 // 		pos := s.nextFree()
-// 		// for _, num := range s.one_to_n {
+// 		// for num := 1; num <= s.n; num++ {
 // 		// 	if s.legalMove(num, pos) {
 // 		// 		s.board[pos] = num
 // 		// 	}
@@ -107,7 +99,7 @@ func (s *Sudoku) nextFree() int {
 // Returns random legal move
 func (s *Sudoku) LegalMove(pos int) int {
 	var legal []int
-	for _, v := range s.one_to_n {
+	for v := 1; v <= s.n; v++ {
 		if s.isLegal(v, pos) {
 			legal = append(legal, v)
 		}

@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	LOOPS := 5000
+	LOOPS := 500
 	SIZE := 9
 	s := solution.InitSudoku(SIZE)
 
