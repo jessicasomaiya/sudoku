@@ -5,7 +5,7 @@ import (
 	"io"
 	"log"
 	"math/rand"
-	"net/http"
+	"os"
 )
 
 func InitSudoku(n int) *Sudoku {
@@ -169,7 +169,7 @@ func (s *Sudoku) clearBoard() {
 	}
 }
 
-func (s *Sudoku) FillWholeBoard(loops int, b *http.ResponseWriter) {
+func (s *Sudoku) FillWholeBoard(loops int, b *os.File) {
 	for i := 0; i <= loops; i++ {
 		// if i%50 == 0 {
 		// 	fmt.Fprintf(b, "Board at %d loops \n", i)
