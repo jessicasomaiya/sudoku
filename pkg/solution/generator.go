@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"math/rand"
+	"net/http"
 	"os"
 )
 
@@ -205,6 +206,38 @@ func (s *Sudoku) FillWholeBoard(loops int, b *os.File) {
 	s.PrintNinePretty(b)
 }
 
+func (s *Sudoku) FillOneBoard(loops int, b io.Writer) {
+	for i := 0; i <= loops; i++ {
+		// if i%50 == 0 {
+		// 	fmt.Fprintf(b, "Board at %d loops \n", i)
+		// 	s.PrintNinePretty(b)
+		// 	fmt.Fprintln(b)
+		// }
+		pos := s.nextFree()
+		if pos == -1 && s.validate() {
+			fmt.Fprintf(b, "\nComplete Sudoku Board at loop %d \n", i)
+			break
+		}
+		value := s.LegalMove(pos)
+		if value == -1 {
+			// fmt.Fprintf(b, "no legal moves in pos %d \n", pos)
+			// No legal move so move back in the tree
+			// nextFree will be one before current one
+			s.FillPos(pos-1, 0)
+			s.FillPos(pos-2, 0)
+			s.FillPos(pos-3, 0)
+			s.FillPos(pos-4, 0)
+			s.FillPos(pos-5, 0)
+			s.FillPos(pos-6, 0)
+			s.FillPos(pos-7, 0)
+			s.FillPos(pos-8, 0)
+			continue
+		}
+		s.FillPos(pos, value)
+	}
+	s.PrintNinePretty(b)
+}
+
 func (s *Sudoku) PrintNinePretty(b io.Writer) {
 	fmt.Fprintf(b, "-------------------------\n")
 	for k, v := range s.board {
@@ -260,3 +293,45 @@ func (s *Sudoku) PrintNinePretty(b io.Writer) {
 // 		fmt.Printf("%d ", v)
 // 	}
 // }
+
+func (s *Sudoku) HandleRequests() {
+	http.HandleFunc("/", sudokuHome)
+	http.HandleFunc("/generate", s.generate)
+
+	log.Fatal(http.ListenAndServe(":8081", nil))
+
+}
+
+func sudokuHome(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Welcome")
+}
+
+func (s *Sudoku) generate(b http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(b, "\nComplete Sudoku Board \n")
+	fmt.Fprintf(b, "-------------------------\n")
+	for k, v := range s.board {
+		// The beginning of every line
+		if k%s.n == 0 {
+			fmt.Fprintf(b, "| %d ", v)
+			continue
+		}
+		// Every third pos
+		if (k+1)%(s.n/3) == 0 && (k+1)%s.n != 0 && (k+1)%(s.n*3) != 0 {
+			fmt.Fprintf(b, "%d | ", v)
+			continue
+		}
+		// At the end of every line
+		if (k+1)%s.n == 0 && (k+1)%(s.n*3) != 0 {
+			fmt.Fprintf(b, "%d | \n", v)
+			continue
+		}
+		// Break line
+		if (k+1)%(s.n*3) == 0 {
+			fmt.Fprintf(b, "%d | \n", v)
+			fmt.Fprintf(b, "-------------------------\n")
+			continue
+		}
+		fmt.Fprintf(b, "%d ", v)
+	}
+
+}

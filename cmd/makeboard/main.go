@@ -16,9 +16,7 @@ func main() {
 	if err != nil {
 		log.Fatal("output cannot be created")
 	}
-	// root := solution.CreateRoot(2)
-	// mcts := solution.NewMCTS(root)
-	// mcts.Gamble(1000)
-	s.FillWholeBoard(LOOPS, b)
-	// api.handleRequests()
+	// s.FillWholeBoard(LOOPS, b)
+	s.FillOneBoard(LOOPS, b)
+	s.HandleRequests()
 }
