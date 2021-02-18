@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/jessicasomaiya/sudoku/pkg/api"
 	"github.com/jessicasomaiya/sudoku/pkg/solution"
 )
 
@@ -26,7 +27,6 @@ func main() {
 		}
 		s.FillWholeBoard(b)
 	case "api":
-		// server.Server()
+		api.Server()
 	}
-
 }
