@@ -6,16 +6,16 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
-	"os"
 )
 
-func InitSudoku(n int) *Sudoku {
+func NewSudoku(n, loops int) *Sudoku {
 	s := &Sudoku{
 		n:      n,
 		board:  make([]int, n*n),
 		row:    make([]int, n),
 		column: make([]int, n),
 		square: make([]int, n),
+		loops:  loops,
 	}
 	return s
 }
@@ -26,6 +26,7 @@ type Sudoku struct {
 	row    []int
 	column []int
 	square []int
+	loops  int
 }
 
 func (s *Sudoku) FillPos(pos, v int) {
@@ -46,11 +47,11 @@ func (s *Sudoku) validate() bool {
 	return false
 }
 
-func (s *Sudoku) printComplete(b io.Writer) {
+func (s *Sudoku) printComplete(w http.ResponseWriter) {
 	if s.nextFree() == -1 {
 
-		fmt.Println("Full board!")
-		s.PrintNinePretty(b)
+		fmt.Fprint(w, "Full board!\n")
+		s.PrintNinePretty(w)
 	}
 }
 
@@ -78,24 +79,24 @@ func (s *Sudoku) nextFree() int {
 	return -1
 }
 
-// func (s *Sudoku) FillBoard() {
-// 	for i := 0; i < len(s.board); i++ {
-// 		pos := s.nextFree()
-// 		// for num := 1; num <= s.n; num++ {
-// 		// 	if s.legalMove(num, pos) {
-// 		// 		s.board[pos] = num
-// 		// 	}
-// 		// 	continue
-// 		// }
-// 		for i := 0; i < s.n; i++ {
-// 			num := rand.Intn(s.n)
-// 			if s.isLegal(num+1, pos) {
-// 				s.board[pos] = num + 1
-// 				continue
-// 			}
-// 		}
-// 	}
-// }
+func (s *Sudoku) FillBoard() {
+	for i := 0; i < len(s.board); i++ {
+		pos := s.nextFree()
+		// for num := 1; num <= s.n; num++ {
+		// 	if s.legalMove(num, pos) {
+		// 		s.board[pos] = num
+		// 	}
+		// 	continue
+		// }
+		for i := 0; i < s.n; i++ {
+			num := rand.Intn(s.n)
+			if s.isLegal(num+1, pos) {
+				s.board[pos] = num + 1
+				continue
+			}
+		}
+	}
+}
 
 // Returns random legal move
 func (s *Sudoku) LegalMove(pos int) int {
@@ -170,8 +171,8 @@ func (s *Sudoku) clearBoard() {
 	}
 }
 
-func (s *Sudoku) FillWholeBoard(loops int, b *os.File) {
-	for i := 0; i <= loops; i++ {
+func (s *Sudoku) FillWholeBoard(w io.Writer) {
+	for i := 0; i <= s.loops; i++ {
 		// if i%50 == 0 {
 		// 	fmt.Fprintf(b, "Board at %d loops \n", i)
 		// 	s.PrintNinePretty(b)
@@ -179,14 +180,14 @@ func (s *Sudoku) FillWholeBoard(loops int, b *os.File) {
 		// }
 		pos := s.nextFree()
 		if pos == -1 && s.validate() {
-			fmt.Fprintf(b, "\nComplete Sudoku Board at loop %d \n", i)
-			s.PrintNinePretty(b)
+			fmt.Fprintf(w, "\nComplete Sudoku Board at loop %d \n", i)
+			s.PrintNinePretty(w)
 			s.clearBoard()
 			continue
 		}
 		value := s.LegalMove(pos)
 		if value == -1 {
-			// fmt.Fprintf(b, "no legal moves in pos %d \n", pos)
+			// fmt.Fprintf(w, "no legal moves in pos %d \n", pos)
 			// No legal move so move back in the tree
 			// nextFree will be one before current one
 			s.FillPos(pos-1, 0)
@@ -202,20 +203,20 @@ func (s *Sudoku) FillWholeBoard(loops int, b *os.File) {
 		}
 		s.FillPos(pos, value)
 	}
-	fmt.Fprintf(b, "\nFinished all loops = %d \n", loops)
-	s.PrintNinePretty(b)
+	fmt.Fprintf(w, "\nFinished all loops = %d \n", s.loops)
+	s.PrintNinePretty(w)
 }
 
-func (s *Sudoku) FillOneBoard(loops int, b io.Writer) {
-	for i := 0; i <= loops; i++ {
+func (s *Sudoku) FillOneBoard(w io.Writer) {
+	for i := 0; i <= s.loops; i++ {
 		// if i%50 == 0 {
-		// 	fmt.Fprintf(b, "Board at %d loops \n", i)
+		// 	fmt.Fprintf(w, "Board at %d loops \n", i)
 		// 	s.PrintNinePretty(b)
 		// 	fmt.Fprintln(b)
 		// }
 		pos := s.nextFree()
 		if pos == -1 && s.validate() {
-			fmt.Fprintf(b, "\nComplete Sudoku Board at loop %d \n", i)
+			fmt.Fprintf(w, "\nComplete Sudoku Board at loop %d \n", i)
 			break
 		}
 		value := s.LegalMove(pos)
@@ -235,36 +236,65 @@ func (s *Sudoku) FillOneBoard(loops int, b io.Writer) {
 		}
 		s.FillPos(pos, value)
 	}
-	s.PrintNinePretty(b)
+	s.PrintNinePretty(w)
 }
 
-func (s *Sudoku) PrintNinePretty(b io.Writer) {
-	fmt.Fprintf(b, "-------------------------\n")
+func (s *Sudoku) PrintNinePretty(w io.Writer) {
+	fmt.Fprintf(w, "-------------------------\n")
 	for k, v := range s.board {
 		// The beginning of every line
 		if k%s.n == 0 {
-			fmt.Fprintf(b, "| %d ", v)
+			fmt.Fprintf(w, "| %d ", v)
 			continue
 		}
 		// Every third pos
 		if (k+1)%(s.n/3) == 0 && (k+1)%s.n != 0 && (k+1)%(s.n*3) != 0 {
-			fmt.Fprintf(b, "%d | ", v)
+			fmt.Fprintf(w, "%d | ", v)
 			continue
 		}
 		// At the end of every line
 		if (k+1)%s.n == 0 && (k+1)%(s.n*3) != 0 {
-			fmt.Fprintf(b, "%d | \n", v)
+			fmt.Fprintf(w, "%d | \n", v)
 			continue
 		}
 		// Break line
 		if (k+1)%(s.n*3) == 0 {
-			fmt.Fprintf(b, "%d | \n", v)
-			fmt.Fprintf(b, "-------------------------\n")
+			fmt.Fprintf(w, "%d | \n", v)
+			fmt.Fprintf(w, "-------------------------\n")
 			continue
 		}
-		fmt.Fprintf(b, "%d ", v)
+		fmt.Fprintf(w, "%d ", v)
 	}
 }
+
+// func (s *Sudoku) generate(b http.ResponseWriter, r *http.Request) {
+// 	fmt.Fprintf(b, "\nComplete Sudoku Board \n")
+// 	fmt.Fprintf(b, "-------------------------\n")
+// 	for k, v := range s.board {
+// 		// The beginning of every line
+// 		if k%s.n == 0 {
+// 			fmt.Fprintf(b, "| %d ", v)
+// 			continue
+// 		}
+// 		// Every third pos
+// 		if (k+1)%(s.n/3) == 0 && (k+1)%s.n != 0 && (k+1)%(s.n*3) != 0 {
+// 			fmt.Fprintf(b, "%d | ", v)
+// 			continue
+// 		}
+// 		// At the end of every line
+// 		if (k+1)%s.n == 0 && (k+1)%(s.n*3) != 0 {
+// 			fmt.Fprintf(b, "%d | \n", v)
+// 			continue
+// 		}
+// 		// Break line
+// 		if (k+1)%(s.n*3) == 0 {
+// 			fmt.Fprintf(b, "%d | \n", v)
+// 			fmt.Fprintf(b, "-------------------------\n")
+// 			continue
+// 		}
+// 		fmt.Fprintf(b, "%d ", v)
+// 	}
+// }
 
 // func (s *Sudoku) PrintNinePretty(b io.Writer) {
 // 	fmt.Print(strings.Repeat("-", ((s.n+4)*2)), "\n")
@@ -293,45 +323,3 @@ func (s *Sudoku) PrintNinePretty(b io.Writer) {
 // 		fmt.Printf("%d ", v)
 // 	}
 // }
-
-func (s *Sudoku) HandleRequests() {
-	http.HandleFunc("/", sudokuHome)
-	http.HandleFunc("/generate", s.generate)
-
-	log.Fatal(http.ListenAndServe(":8081", nil))
-
-}
-
-func sudokuHome(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Welcome")
-}
-
-func (s *Sudoku) generate(b http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(b, "\nComplete Sudoku Board \n")
-	fmt.Fprintf(b, "-------------------------\n")
-	for k, v := range s.board {
-		// The beginning of every line
-		if k%s.n == 0 {
-			fmt.Fprintf(b, "| %d ", v)
-			continue
-		}
-		// Every third pos
-		if (k+1)%(s.n/3) == 0 && (k+1)%s.n != 0 && (k+1)%(s.n*3) != 0 {
-			fmt.Fprintf(b, "%d | ", v)
-			continue
-		}
-		// At the end of every line
-		if (k+1)%s.n == 0 && (k+1)%(s.n*3) != 0 {
-			fmt.Fprintf(b, "%d | \n", v)
-			continue
-		}
-		// Break line
-		if (k+1)%(s.n*3) == 0 {
-			fmt.Fprintf(b, "%d | \n", v)
-			fmt.Fprintf(b, "-------------------------\n")
-			continue
-		}
-		fmt.Fprintf(b, "%d ", v)
-	}
-
-}

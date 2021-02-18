@@ -1,22 +1,32 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"os"
 
 	"github.com/jessicasomaiya/sudoku/pkg/solution"
 )
 
-func main() {
-	LOOPS := 500
-	SIZE := 9
-	s := solution.InitSudoku(SIZE)
+var (
+	LOOPS = 1000
+	SIZE  = 9
+)
 
-	b, err := os.Create("boards")
-	if err != nil {
-		log.Fatal("output cannot be created")
+func main() {
+	runtime := flag.String("runtime", "go", "go|api runner")
+
+	s := solution.NewSudoku(SIZE, LOOPS)
+
+	switch *runtime {
+	case "go":
+		b, err := os.Create("board")
+		if err != nil {
+			log.Fatal(err, " os.Create")
+		}
+		s.FillWholeBoard(b)
+	case "api":
+		// server.Server()
 	}
-	// s.FillWholeBoard(LOOPS, b)
-	s.FillOneBoard(LOOPS, b)
-	s.HandleRequests()
+
 }
