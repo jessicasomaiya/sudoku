@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"log"
 	"os"
 
@@ -15,18 +14,27 @@ var (
 )
 
 func main() {
-	runtime := flag.String("runtime", "go", "go|api runner")
 
 	s := solution.NewSudoku(SIZE, LOOPS)
 
-	switch *runtime {
-	case "go":
-		b, err := os.Create("board")
-		if err != nil {
-			log.Fatal(err, " os.Create")
-		}
-		s.FillWholeBoard(b)
-	case "api":
-		api.Server()
+	b, err := os.Create("board")
+	if err != nil {
+		log.Fatal(err, " os.Create")
 	}
+	s.FillWholeBoard(b)
+
+	api.Server()
+
+	// This isn't working!
+	// runtime := flag.String("runtime", "go", "go|api runner")
+	// switch *runtime {
+	// case "go":
+	// 	b, err := os.Create("board")
+	// 	if err != nil {
+	// 		log.Fatal(err, " os.Create")
+	// 	}
+	// 	s.FillWholeBoard(b)
+	// case "api":
+	// 	api.Server()
+	// }
 }
