@@ -57,7 +57,7 @@ func genHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Size = %d\n", size)
 	fmt.Fprintf(w, "Loops = %d\n", loops)
 
-	// Use sixe and loops as input
+	// Use size and loops as input
 	s := solution.NewSudoku(size, loops)
 	s.FillWholeBoard(w)
 }

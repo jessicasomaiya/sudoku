@@ -37,3 +37,10 @@ Complete Sudoku Board at loop X
 | 9 8 6 | 7 2 5 | 3 4 1 | 
 -------------------------
 ```
+## Run server
+
+```
+go run cmd/makeboard/main.go
+```
+
+go to localhost:8080/generate.html
