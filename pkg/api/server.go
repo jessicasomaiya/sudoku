@@ -37,22 +37,27 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func genHandler(w http.ResponseWriter, r *http.Request) {
+	// Parses the request and populates r.Form
 	if err := r.ParseForm(); err != nil {
 		fmt.Fprintf(w, "ParseForm() err: %v", err)
 		return
 	}
+
+	// Take size and loops as an input, convert to int and use to create sudoku solution
 	size, err := strconv.Atoi(r.FormValue("Size"))
 	if err != nil {
 		log.Fatal(err)
 	}
-	loop, err := strconv.Atoi(r.FormValue("Loops"))
+	loops, err := strconv.Atoi(r.FormValue("Loops"))
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// Display inputs to user
 	fmt.Fprintf(w, "Size = %d\n", size)
-	fmt.Fprintf(w, "Loops = %d\n", loop)
+	fmt.Fprintf(w, "Loops = %d\n", loops)
 
-	s := solution.NewSudoku(size, loop)
+	// Use sixe and loops as input
+	s := solution.NewSudoku(size, loops)
 	s.FillWholeBoard(w)
 }
