@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -14,10 +15,13 @@ var (
 
 func main() {
 	s := solution.NewSudoku(SIZE, LOOPS)
-
-	b, err := os.Create("../board")
+	dir := "../board"
+	b, err := os.Create(dir)
 	if err != nil {
 		log.Fatal(err, " os.Create")
 	}
 	s.FillWholeBoard(b)
+
+	fmt.Printf("\n✨Running locally✨\n\nGo to %s to see solutions \n", dir)
+
 }

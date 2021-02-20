@@ -6,7 +6,11 @@ Generate full sudoku grid from scratch using golang.
 
 To run the code from the sudoku directory, run the following command:
 ```
-go run cmd/makeboard/main.go
+make local
+```
+
+```
+make api
 ```
 #
 
@@ -37,10 +41,3 @@ Complete Sudoku Board at loop X
 | 9 8 6 | 7 2 5 | 3 4 1 | 
 -------------------------
 ```
-## Run server
-
-```
-go run cmd/makeboard/main.go
-```
-
-go to localhost:8080/generate.html
