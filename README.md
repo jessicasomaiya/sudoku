@@ -4,11 +4,11 @@ Generate full sudoku grid from scratch using golang.
 #
 ## Run 
 
-To run the code from the sudoku directory, run the following command:
+To generate a sudoku board locally, run:
 ```
 make local
 ```
-
+To generate a sudoku board through the server, run:
 ```
 make api
 ```
