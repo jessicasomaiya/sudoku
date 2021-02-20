@@ -1,4 +1,4 @@
-package api
+package server
 
 import (
 	"fmt"
@@ -9,8 +9,10 @@ import (
 	"github.com/jessicasomaiya/sudoku/pkg/solution"
 )
 
-func Server() {
-	fileServer := http.FileServer(http.Dir("./static"))
+var staticDir = "./../../pkg/server/static"
+
+func New() {
+	fileServer := http.FileServer(http.Dir(staticDir))
 	http.Handle("/", fileServer)
 
 	http.HandleFunc("/hello", helloHandler)
@@ -57,7 +59,7 @@ func genHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Size = %d\n", size)
 	fmt.Fprintf(w, "Loops = %d\n", loops)
 
-	// Use size and loops as input
+	// // Use size and loops as input
 	s := solution.NewSudoku(size, loops)
 	s.FillWholeBoard(w)
 }

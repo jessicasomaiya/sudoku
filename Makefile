@@ -1,9 +1,7 @@
-MAIN_DIR = cmd/makeboard
-
-.PHONY: local mpi
+MAIN_DIR = cmd
 
 local: 
-	go run $(MAIN_DIR)/main.go 
+	go run $(MAIN_DIR)/local/main.go 
 
 api: 
-	go run $(MAIN_DIR)/main.go -runtime=api
+	go run $(MAIN_DIR)/api/main.go
