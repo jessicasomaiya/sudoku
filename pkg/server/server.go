@@ -9,7 +9,7 @@ import (
 	"github.com/jessicasomaiya/sudoku/pkg/solution"
 )
 
-var staticDir = "./../../pkg/server/static"
+var staticDir = "./pkg/server/static"
 
 func New() {
 	fileServer := http.FileServer(http.Dir(staticDir))
@@ -17,6 +17,7 @@ func New() {
 
 	http.HandleFunc("/hello", helloHandler)
 	http.HandleFunc("/generate", genHandler)
+	// http.HandleFunc("/generate-all", genAllHandler)
 
 	fmt.Printf("Starting server at port 8080\n")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
@@ -39,6 +40,10 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func genHandler(w http.ResponseWriter, r *http.Request) {
+	var (
+		err error
+	)
+
 	// Parses the request and populates r.Form
 	if err := r.ParseForm(); err != nil {
 		fmt.Fprintf(w, "ParseForm() err: %v", err)
@@ -46,11 +51,20 @@ func genHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Take size and loops as an input, convert to int and use to create sudoku solution
-	size, err := strconv.Atoi(r.FormValue("Size"))
+	si := r.FormValue("Size")
+	if si == "" {
+		si = "9"
+	}
+	l := r.FormValue("Loops")
+	if l == "" {
+		l = "500"
+	}
+
+	size, err := strconv.Atoi(si)
 	if err != nil {
 		log.Fatal(err)
 	}
-	loops, err := strconv.Atoi(r.FormValue("Loops"))
+	loops, err := strconv.Atoi(l)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -61,5 +75,44 @@ func genHandler(w http.ResponseWriter, r *http.Request) {
 
 	// // Use size and loops as input
 	s := solution.NewSudoku(size, loops)
-	s.FillWholeBoard(w)
+	s.FillOneBoard(w)
 }
+
+// func genAllHandler(w http.ResponseWriter, r *http.Request) {
+// 	var (
+// 		err error
+// 	)
+
+// 	// Parses the request and populates r.Form
+// 	if err := r.ParseForm(); err != nil {
+// 		fmt.Fprintf(w, "ParseForm() err: %v", err)
+// 		return
+// 	}
+
+// 	// Take size and loops as an input, convert to int and use to create sudoku solution
+// 	si := r.FormValue("Size")
+// 	if si == "" {
+// 		si = "9"
+// 	}
+// 	l := r.FormValue("Loops")
+// 	if l == "" {
+// 		l = "500"
+// 	}
+
+// 	size, err := strconv.Atoi(si)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	loops, err := strconv.Atoi(l)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+
+// 	// Display inputs to user
+// 	fmt.Fprintf(w, "Size = %d\n", size)
+// 	fmt.Fprintf(w, "Loops = %d\n", loops)
+
+// 	// // Use size and loops as input
+// 	s := solution.NewSudoku(size, loops)
+// 	s.FillWholeBoard(w)
+// }

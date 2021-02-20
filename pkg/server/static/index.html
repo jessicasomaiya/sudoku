@@ -1,8 +1,27 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>It's Sudoku Time</title>
-  </head>
-  <body>
-    <h2>Are you ready for Sudoku Time</h2>
-  </body>
+<head>
+<title>It's Sudoku Time!</title>
+</head>
+<body>
+
+<h1>Hello, thank you for entering the sudoku experience</h1>
+<p>This tool generates a fully completed sudoku square. If you want to generate your own sudoku board please click below</p>
+
+
+<div id="menubar">
+  <ul id="menu">
+    <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
+    <li class="selected"><a href="index.html">Home</a></li>
+    <li><a href="generate.html">Generate</a></li>
+    <!-- <li><a href="generate.html">Quick generate</a></li> -->
+  </ul>
+</div>
+
+<form method="POST" action="/generate.html">     
+  <button> Click Here!</button>
+</form>
+
+
+</body>
 </html>

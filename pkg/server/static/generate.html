@@ -5,10 +5,12 @@
 </head>
 <body>
 <div>
+  <label>Size</label><input name="Size" type="text" value="9" />
+  <label>Loops</label><input name="Loops" type="text" value="500" />
   <form method="POST" action="/generate">     
-      <label>Size</label><input name="Size" type="text" value="" />
-      <label>Loops</label><input name="Loops" type="text" value="" />
-      <input type="submit" value="submit" />
+    <input type="submit" value="generate one" />
+    <!-- <form method="POST" action="/generate-all">     
+      <input type="submit" value="generate all" /> -->
   </form>
 </div>
 </body>
