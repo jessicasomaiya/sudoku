@@ -15,7 +15,7 @@ var (
 
 func main() {
 	s := solution.NewSudoku(SIZE, LOOPS)
-	dir := "../board"
+	dir := "board"
 	b, err := os.Create(dir)
 	if err != nil {
 		log.Fatal(err, " os.Create")
