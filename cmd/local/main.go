@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	LOOPS = 1000
+	LOOPS = 2000
 	SIZE  = 9
 )
 
@@ -23,5 +23,4 @@ func main() {
 	s.FillWholeBoard(b)
 
 	fmt.Printf("\n✨Running locally✨\n\nGo to %s to see solutions \n", dir)
-
 }
