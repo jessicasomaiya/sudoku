@@ -75,7 +75,7 @@ func genHandler(w http.ResponseWriter, r *http.Request) {
 
 	// // Use size and loops as input
 	s := solution.NewSudoku(size, loops)
-	s.FillOneBoard(w)
+	s.Start(w, true)
 }
 
 // func genAllHandler(w http.ResponseWriter, r *http.Request) {
