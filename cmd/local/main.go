@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	LOOPS = 2000
+	LOOPS = 100000
 	SIZE  = 9
 )
 
@@ -20,7 +20,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err, " os.Create")
 	}
-	s.FillWholeBoard(b)
+	// s.FillWholeBoard(b)
+
+	s.Start(b, false)
 
 	fmt.Printf("\n✨Running locally✨\n\nGo to %s to see solutions \n", dir)
 }
