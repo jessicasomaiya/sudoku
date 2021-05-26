@@ -1,4 +1,4 @@
-package main
+package helpers
 
 import (
 	"fmt"
@@ -9,14 +9,14 @@ import (
 
 const (
 	// change size when you need to generate more square lookups
-	size = 9
+	size = 25
 )
 
 func main() {
-	fmt.Println(formatSlice(generateSquare(size)))
+	fmt.Println(formatSlice(generateSquareLookup(size)))
 }
 
-func generateSquare(n int) [][]int {
+func generateSquareLookup(n int) [][]int {
 	lookup := make([][]int, n)
 
 	root := int(math.Sqrt(float64(n)))

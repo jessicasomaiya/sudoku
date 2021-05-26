@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/jessicasomaiya/sudoku/pkg/solution"
+	"github.com/jessicasomaiya/sudoku/pkg/solver"
 )
 
 var (
@@ -14,15 +14,15 @@ var (
 )
 
 func main() {
-	s := solution.NewSudoku(SIZE, LOOPS)
+	s := solver.NewSudoku(SIZE, LOOPS)
+
 	dir := "board"
 	b, err := os.Create(dir)
 	if err != nil {
 		log.Fatal(err, " os.Create")
 	}
-	// s.FillWholeBoard(b)
 
-	s.Start(b, false)
+	s.Start(b, true)
 
 	fmt.Printf("\n✨Running locally✨\n\nGo to %s to see solutions \n", dir)
 }
