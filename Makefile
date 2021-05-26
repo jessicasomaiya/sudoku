@@ -4,4 +4,4 @@ local:
 	go run $(MAIN_DIR)/local/main.go 
 
 api: 
-	go run $(MAIN_DIR)/api/main.go 
+	go run $(MAIN_DIR)/api/server/server.go 

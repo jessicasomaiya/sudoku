@@ -1,4 +1,4 @@
-package server
+package handlers
 
 import (
 	"fmt"
@@ -9,24 +9,7 @@ import (
 	"github.com/jessicasomaiya/sudoku/pkg/solver"
 )
 
-var staticDir = "./pkg/server/static"
-
-// chi handler?
-
-func New() {
-	fileServer := http.FileServer(http.Dir(staticDir))
-	http.Handle("/", fileServer)
-
-	http.HandleFunc("/hello", helloHandler)
-	http.HandleFunc("/generate", genHandler)
-
-	fmt.Print("\n✨Starting server at port 8080.✨\n\nClick here 👉: http://localhost:8080 \n")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
-		log.Fatal(err)
-	}
-}
-
-func helloHandler(w http.ResponseWriter, r *http.Request) {
+func Hello(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/hello" {
 		http.Error(w, "On the wrong path!", http.StatusNotFound)
 		return
@@ -40,7 +23,7 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello!")
 }
 
-func genHandler(w http.ResponseWriter, r *http.Request) {
+func Run(w http.ResponseWriter, r *http.Request) {
 	var (
 		err error
 	)

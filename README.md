@@ -12,6 +12,7 @@ To generate a sudoku board through the server, run:
 ```
 make api
 ```
+
 #
 
 ## Parameters
@@ -24,7 +25,7 @@ Parameters can be changed in main.go:
  Currently best results come from 9x9 sudoku grid (size = 9)
 #
 ## Complete Grid
-Complete grid can be found in the sudoku directory under 'boards'
+Complete grid can be found locally in the sudoku repository under 'boards'
 ```
 Complete Sudoku Board at loop X
 -------------------------
@@ -41,3 +42,8 @@ Complete Sudoku Board at loop X
 | 9 8 6 | 7 2 5 | 3 4 1 | 
 -------------------------
 ```
+#
+
+## Disclaimer: 
+
+This is a work in progress!
