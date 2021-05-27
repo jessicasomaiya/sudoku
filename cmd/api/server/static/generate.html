@@ -13,6 +13,14 @@
       background: #f1f1f1;
     }
 
+    form {
+      padding-top: 30px;
+      padding-right: 30px;
+      padding-bottom: 50px;
+      padding-left: 80px;
+      width: 600px;
+    }
+
     /* Header/Blog Title */
     .header {
       padding: 30px;
@@ -21,11 +29,40 @@
     }
 
     .header h1 {
-      font-size: 50px;
+      font-size: 30px;
     }
 
-    h2 {
-      text-align: center;
+    h3 {
+      text-align: left;
+    }
+
+    label {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      text-align: right;
+      width: 250px;
+      line-height: 26px;
+      margin-bottom: 10px;
+    }
+
+    input[type=text] {
+      padding:5px; 
+      margin-left: 10px;
+      border:2px solid #ccc; 
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+    }
+
+    input[type=submit] {
+        padding:10px 20px; 
+        background:#ccc; 
+        border:0 none;
+        cursor:pointer;
+        -webkit-border-radius: 5px;
+        border-radius: 5px; 
+        width: 400px;
+        font-size:large;
     }
 
     /* Style the top navigation bar */
@@ -62,21 +99,34 @@
       below</p>
   </div>
 
-  <h2>Please select the size of your grid</h2>
+  <div class="topnav">
+    <a href="index.html">Home</a>
+    <a href="generate.html">Generate</a>
+  </div>
 
+  
   <div>
     <form method="POST" action="/generate">
-      <label>Size</label><input id="Size" name="Size" type="text" value="9" />
+      <h3>Please select the size of your grid</h3>
+      <label>
+        Size<input id="Size" name="Size" type="text" value="9" />
+      </label>
 
-      <br>
-      <br>
+      <label>
+        Loops<input id="Loops" name="Loops" type="text" value="500" />
+      </label>
 
-      <label>Loops</label><input id="Loops" name="Loops" type="text" value="500" />
+      <br> 
 
-      <br>
-      <br>
+        <h3>What would you one solution or many solutions?</h3>
+        <input type="radio" name="multiple" value="false" required> One Solution
+        <input type="radio" name="multiple" value="true"> Many Solutions
 
-      <input type="submit" value="Generate A Solution" />
+        <br>
+        <br>
+        <br>
+
+      <input type="submit" value="Generate A Solution";/>
     </form>
   </div>
 </body>

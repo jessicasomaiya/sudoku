@@ -9,8 +9,9 @@ import (
 )
 
 var (
-	LOOPS = 100000
-	SIZE  = 9
+	LOOPS              = 100000
+	SIZE               = 9
+	MULTIPLE_SOLUTIONS = true
 )
 
 func main() {
@@ -22,7 +23,7 @@ func main() {
 		log.Fatal(err, " os.Create")
 	}
 
-	s.Start(b, true)
+	s.Start(b, MULTIPLE_SOLUTIONS)
 
 	fmt.Printf("\n✨Running locally✨\n\nGo to %s to see solutions \n", dir)
 }

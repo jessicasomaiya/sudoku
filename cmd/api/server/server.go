@@ -12,11 +12,6 @@ var staticDir = "cmd/api/server/static"
 
 // chi handler?
 
-var (
-	LOOPS = 10000
-	SIZE  = 9
-)
-
 func main() {
 
 	fileServer := http.FileServer(http.Dir(staticDir))

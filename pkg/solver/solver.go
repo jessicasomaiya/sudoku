@@ -43,6 +43,11 @@ func (s *Sudoku) Start(w io.Writer, many bool) {
 		return
 	}
 
+	if _, ok := helpers.SquareLookup[s.n]; !ok {
+		fmt.Fprint(w, "\nSize not yet supported\n ")
+		return
+	}
+
 	s.Run(w, many)
 }
 
@@ -50,8 +55,8 @@ func (s *Sudoku) Run(w io.Writer, many bool) {
 
 	for i := 0; i <= s.loops; i++ {
 		pos := s.nextFree()
+		// when complete board has been written, clear and start again
 		if pos == -1 && s.validate() {
-			// when complete board has been written, clear and start again
 			fmt.Fprintf(w, "\nComplete Sudoku Board at loop %d \n", i)
 			s.printPretty(w)
 
@@ -63,6 +68,7 @@ func (s *Sudoku) Run(w io.Writer, many bool) {
 			continue
 		}
 
+		// find next value to populate board
 		value := s.legalMove(pos)
 		if pos == -1 || value == -1 {
 			// No legal move so move back in the tree

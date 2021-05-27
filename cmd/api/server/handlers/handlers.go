@@ -44,6 +44,11 @@ func Run(w http.ResponseWriter, r *http.Request) {
 		l = "500"
 	}
 
+	multiple, err := strconv.ParseBool(r.FormValue("multiple"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	size, err := strconv.Atoi(si)
 	if err != nil {
 		log.Fatal(err)
@@ -60,5 +65,5 @@ func Run(w http.ResponseWriter, r *http.Request) {
 
 	// Use size and loops as input
 	s := solver.NewSudoku(size, loops)
-	s.Start(w, false)
+	s.Start(w, multiple)
 }
