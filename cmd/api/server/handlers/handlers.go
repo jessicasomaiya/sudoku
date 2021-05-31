@@ -35,11 +35,11 @@ func Run(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Take size and loops as an input, convert to int and use to create sudoku solution
-	si := r.FormValue("Size")
-	if si == "" {
-		si = "9"
+	sz := r.FormValue("size")
+	if sz == "" {
+		sz = "9"
 	}
-	l := r.FormValue("Loops")
+	l := r.FormValue("loops")
 	if l == "" {
 		l = "500"
 	}
@@ -49,7 +49,7 @@ func Run(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	size, err := strconv.Atoi(si)
+	size, err := strconv.Atoi(sz)
 	if err != nil {
 		log.Fatal(err)
 	}

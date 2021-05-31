@@ -1,6 +1,6 @@
-package helpers
+package solver
 
-var SquareLookup = map[int][][]int{
+var squareLookup = map[int][][]int{
 	4:  squareLookupForFour,
 	9:  squareLookupForNine,
 	16: squareLookupForSixteen,

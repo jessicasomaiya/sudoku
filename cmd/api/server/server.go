@@ -8,7 +8,7 @@ import (
 	"github.com/jessicasomaiya/sudoku/cmd/api/server/handlers"
 )
 
-var staticDir = "cmd/api/server/static"
+var staticDir = "html"
 
 // chi handler?
 

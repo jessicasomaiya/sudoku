@@ -29,7 +29,7 @@ func (s *Sudoku) setColumn(pos int) {
 }
 
 func (s *Sudoku) findSquare(pos int) []int {
-	for _, square := range helpers.SquareLookup[s.n] {
+	for _, square := range squareLookup[s.n] {
 		if helpers.Contains(square, pos) {
 			return square
 		}

@@ -43,7 +43,7 @@ func (s *Sudoku) Start(w io.Writer, many bool) {
 		return
 	}
 
-	if _, ok := helpers.SquareLookup[s.n]; !ok {
+	if _, ok := squareLookup[s.n]; !ok {
 		fmt.Fprint(w, "\nSize not yet supported\n ")
 		return
 	}

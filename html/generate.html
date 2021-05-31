@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+
+  <div class="header">
+    <h1>Hello, and welcome to the Sudoku Solver</h1>
+    <p>This tool generates a fully completed sudoku grid
+      below</p>
+  </div>
+
+  <div class="topnav">
+    <a href="index.html">Home</a>
+    <a href="generate.html">Generate</a>
+  </div>
+
+  
+  <div>
+    <form method="GET" action="/generate">
+      <h3>Please select the size of your grid</h3>
+      <label>
+        Size<input id="size" name="size" type="text" value="9" />
+      </label>
+
+      <label>
+        Loops<input id="loops" name="loops" type="text" value="500" />
+      </label>
+
+      <br> 
+
+        <h3>What would you one solution or many solutions?</h3>
+        <input type="radio" name="multiple" value="false" required> One Solution
+        <input type="radio" name="multiple" value="true"> Many Solutions
+
+        <br>
+        <br>
+        <br>
+
+      <input type="submit" value="Generate A Solution";/>
+    </form>
+  </div>
+</body>
+
+</html>
+<html>
