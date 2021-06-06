@@ -9,10 +9,10 @@ import (
 
 const (
 	// change size when you need to generate more square lookups
-	size = 25
+	size = 36
 )
 
-func main() {
+func outputLookup() {
 	fmt.Println(formatSlice(generateSquareLookup(size)))
 }
 
