@@ -17,11 +17,10 @@ type Sudoku struct {
 	row    []int
 	column []int
 	square []int
-	loops  int
 }
 
 // NewSudoku creates stucture of the sudoku board
-func NewSudoku(n, loops int) *Sudoku {
+func NewSudoku(n int) *Sudoku {
 	s := &Sudoku{
 		n:      n,
 		sumToN: helpers.SumToN(n),
@@ -29,14 +28,13 @@ func NewSudoku(n, loops int) *Sudoku {
 		row:    make([]int, n),
 		column: make([]int, n),
 		square: make([]int, n),
-		loops:  loops,
 	}
 
 	return s
 }
 
 // Start begins solving the sudoku - many is false if only one board is required
-func (s *Sudoku) Start(w io.Writer, many bool) {
+func (s *Sudoku) Start(w io.Writer, many bool, loops int) {
 
 	if !s.isSquareNumber(s.n) {
 		fmt.Fprint(w, "\nSize must be a square number\n ")
@@ -48,12 +46,12 @@ func (s *Sudoku) Start(w io.Writer, many bool) {
 		return
 	}
 
-	s.Run(w, many)
+	s.Run(w, many, loops)
 }
 
-func (s *Sudoku) Run(w io.Writer, many bool) {
+func (s *Sudoku) Run(w io.Writer, many bool, loops int) {
 
-	for i := 0; i <= s.loops; i++ {
+	for i := 0; i <= loops; i++ {
 		pos := s.nextFree()
 		// when complete board has been written, clear and start again
 		if pos == -1 && s.validate() {
@@ -63,7 +61,6 @@ func (s *Sudoku) Run(w io.Writer, many bool) {
 			if !many {
 				return
 			}
-
 			s.clearBoard()
 			continue
 		}
@@ -79,7 +76,7 @@ func (s *Sudoku) Run(w io.Writer, many bool) {
 		// If pos != -1, ie there is a space on the board to be filled, fill it with value!
 		s.fillPos(pos, value)
 	}
-	fmt.Fprintf(w, "\nFinished all loops = %d \n ", s.loops)
+	fmt.Fprintf(w, "\nFinished all loops = %d \n ", loops)
 	s.printPretty(w)
 }
 
@@ -93,11 +90,14 @@ func (s *Sudoku) validate() bool {
 			total += s.board[i]
 		}
 
-		if total == s.sumToN {
-			return true
+		if total != s.sumToN {
+			return false
 		}
+
+		total = 0
+
 	}
-	return false
+	return true
 }
 
 // nextFree returns the next position on the board to be filled in

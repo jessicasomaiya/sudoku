@@ -15,7 +15,7 @@ var (
 )
 
 func main() {
-	s := solver.NewSudoku(SIZE, LOOPS)
+	s := solver.NewSudoku(SIZE)
 
 	dir := "board"
 	b, err := os.Create(dir)
@@ -23,7 +23,7 @@ func main() {
 		log.Fatal(err, " os.Create")
 	}
 
-	s.Start(b, MULTIPLE_SOLUTIONS)
+	s.Start(b, MULTIPLE_SOLUTIONS, LOOPS)
 
 	fmt.Printf("\n✨Running locally✨\n\nGo to %s to see solutions \n", dir)
 }

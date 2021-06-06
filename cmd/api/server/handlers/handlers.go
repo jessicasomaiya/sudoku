@@ -64,6 +64,6 @@ func Run(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Loops = %d\n", loops)
 
 	// Use size and loops as input
-	s := solver.NewSudoku(size, loops)
-	s.Start(w, multiple)
+	s := solver.NewSudoku(size)
+	s.Start(w, multiple, loops)
 }
