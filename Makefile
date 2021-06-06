@@ -5,3 +5,6 @@ local:
 
 api: 
 	go run $(MAIN_DIR)/api/server/server.go 
+
+test: 
+	go test -v ./...
