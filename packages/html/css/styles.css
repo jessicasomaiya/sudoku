@@ -1,54 +1,54 @@
 body {
   font-family: Arial;
-  padding: 10px;
+  padding: 1rem;
   background: #f1f1f1;
 }
 
 form {
-  padding-top: 30px;
-  padding-right: 30px;
-  padding-bottom: 50px;
-  padding-left: 80px;
-  width: 600px;
+  padding-top: 1rem;
+  padding-right: 2rem;
+  padding-bottom: 2rem;
+  padding-left: 10rem;
+  width: 36rem;
 }
 
 /* Header/Blog Title */
 .header {
-  padding: 30px;
+  padding: 1rem;
   text-align: center;
   background: rgb(246, 247, 183);
 }
 
 .header h1 {
-  font-size: 30px;
+  font-size: 2rem;
 }
 
 label {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  padding-left: 10rem;
   text-align: right;
-  width: 250px;
-  line-height: 26px;
-  margin-bottom: 10px;
+  width: 5rem;
+  line-height: 1rem;
+  margin-bottom: 1rem;
 }
 
 input[type="text"] {
-  padding: 5px;
-  margin-left: 10px;
-  border: 2px solid #ccc;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
+  margin-left: 2rem;
+  border: 0.3rem solid #ccc;
+  -webkit-border-radius: 0.3rem;
+  border-radius: 0.3rem;
 }
 
 input[type="submit"] {
-  padding: 10px 20px;
+  padding: 1rem 2rem;
   background: #ccc;
   border: 0 none;
   cursor: pointer;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  width: 400px;
+  -webkit-border-radius: 0.3rem;
+  border-radius: 0.3rem;
+  width: 20rem;
   font-size: large;
 }
 
@@ -56,6 +56,7 @@ input[type="submit"] {
 .topnav {
   overflow: hidden;
   background-color: #333;
+  height: 4rem;
 }
 
 /* Style the topnav links */
@@ -64,7 +65,7 @@ input[type="submit"] {
   display: block;
   color: #f2f2f2;
   text-align: center;
-  padding: 14px 16px;
+  padding: 1.5rem 1.6rem;
   text-decoration: none;
 }
 

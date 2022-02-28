@@ -6,17 +6,17 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/jessicasomaiya/sudoku/pkg/solver"
+	"github.com/jessicasomaiya/sudoku/packages/api/internal/solver"
 )
 
 func Hello(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/hello" {
-		http.Error(w, "On the wrong path!", http.StatusNotFound)
+		http.Error(w, "on the wrong path!", http.StatusNotFound)
 		return
 	}
 
 	if r.Method != "GET" {
-		http.Error(w, "Method is not supported.", http.StatusNotFound)
+		http.Error(w, "method is not supported", http.StatusNotFound)
 		return
 	}
 

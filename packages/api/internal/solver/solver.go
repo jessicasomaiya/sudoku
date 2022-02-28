@@ -6,7 +6,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/jessicasomaiya/sudoku/pkg/helpers"
+	"github.com/jessicasomaiya/sudoku/packages/api/internal/helpers"
 )
 
 type Sudoku struct {

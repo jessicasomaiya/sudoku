@@ -3,7 +3,7 @@ package solver
 import (
 	"log"
 
-	"github.com/jessicasomaiya/sudoku/pkg/helpers"
+	"github.com/jessicasomaiya/sudoku/packages/api/internal/helpers"
 )
 
 // fillPos fills in the given position with the value v in sudoku board
