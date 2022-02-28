@@ -3,7 +3,7 @@ package solver
 import (
 	"math"
 
-	"github.com/jessicasomaiya/sudoku/pkg/helpers"
+	"github.com/jessicasomaiya/sudoku/packages/api/internal/helpers"
 )
 
 func (s *Sudoku) isSquareNumber(i int) bool {

@@ -1,10 +1,12 @@
-MAIN_DIR = cmd
+MAIN_DIR = packages/api/cmd
 
-local: 
-	go run $(MAIN_DIR)/local/main.go 
+all: api
 
-api: 
-	go run $(MAIN_DIR)/api/server/server.go 
+api:
+	@ go run $(MAIN_DIR)/main.go 
+
+local: test
+	@ go run $(MAIN_DIR)/main.go  -local
 
 test: 
-	go test -v ./...
+	@go test -v ./...
